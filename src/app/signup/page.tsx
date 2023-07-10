@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -14,19 +15,22 @@ let SignUp = () => {
 		password: "",
 	});
 	let [isButtonDisabled, setButtonDisabled] = useState(false);
+	let [isLoading, setLoading] = useState(false);
 
 	let onSignup = async () => {
 		try {
 			setButtonDisabled(true);
-			const data = await axios.post("/api/users/signup", user);
-			console.log(data);
+			setLoading(true);
+			await axios.post("/api/users/signup", user);
 
 			toast.success(
-				"User registered successfully. Please login before continuing."
+				"User registered successfully. Please verify before logging in."
 			);
 			router.push("/login");
 		} catch (error) {
 			console.log(error);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -107,8 +111,15 @@ let SignUp = () => {
 						isButtonDisabled ? "disabled:bg-gray-500" : ""
 					}`}
 				>
-					SignUp
+					{isLoading == true ? "Signing up" : "Signup"}
 				</button>
+				<p className="py-4">
+					Already have an account?{" "}
+					<Link className="hover:text-green-500 underline" href={"/login"}>
+						Click here
+					</Link>{" "}
+					to login
+				</p>
 			</div>
 		</>
 	);

@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -89,6 +90,17 @@ let Login = () => {
 				>
 					{isLoading == true ? "Logging In" : "login"}
 				</button>
+
+				<p className="py-4">
+					Dont have an account?{" "}
+					<Link
+						className="hover:text-green-500 underline"
+						href={"/signup"}
+					>
+						Click here
+					</Link>{" "}
+					to signup
+				</p>
 			</div>
 		</>
 	);
