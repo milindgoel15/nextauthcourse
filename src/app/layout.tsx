@@ -22,8 +22,8 @@ export default function RootLayout({
 				<header className="flex flex-row text-xl justify-between mx-8 py-4">
 					<h2>next auth course</h2>
 					<nav className="flex flex-row gap-4">
-						<Link href={"/login"}>Login</Link>
-						<Link href={"/signup"}>Signup</Link>
+						<Link href={"/profile"}>Profile</Link>
+						<Link href={"/cart"}>Cart</Link>
 					</nav>
 				</header>
 				<Toaster />

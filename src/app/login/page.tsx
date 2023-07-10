@@ -13,19 +13,21 @@ let Login = () => {
 		password: "",
 	});
 	let [isButtonDisabled, setButtonDisabled] = useState(false);
+	let [isLoading, setLoading] = useState(false);
 
 	let onSignin = async () => {
 		try {
 			setButtonDisabled(true);
-			const data = await axios.post("/api/users/login", user);
-			console.log(data);
+			setLoading(true);
+			await axios.post("/api/users/login", user);
 
 			toast.success("User login success");
-			router.push("/profile");
+			router.push(`/profile`);
 		} catch (error) {
 			console.log(error);
 		} finally {
 			setButtonDisabled(false);
+			setLoading(false);
 		}
 	};
 
@@ -81,11 +83,11 @@ let Login = () => {
 				<button
 					onClick={onSignin}
 					disabled={isButtonDisabled == false ? false : true}
-					className={`bg-blue-500 px-3 py-2 text-xl ${
+					className={`bg-blue-500 rounded-md px-3 py-2 text-xl ${
 						isButtonDisabled ? "disabled:bg-gray-500" : ""
 					}`}
 				>
-					Login
+					{isLoading == true ? "Logging In" : "login"}
 				</button>
 			</div>
 		</>
