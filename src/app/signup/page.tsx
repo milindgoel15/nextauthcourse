@@ -21,14 +21,20 @@ let SignUp = () => {
 		try {
 			setButtonDisabled(true);
 			setLoading(true);
-			await axios.post("/api/users/signup", user);
 
-			toast.success(
-				"User registered successfully. Please verify before logging in."
-			);
-			router.push("/login");
-		} catch (error) {
-			console.log(error);
+			const req = await axios.post("/api/users/signup", user);
+
+			if (req.data.message == "User added!") {
+				toast.success(
+					"User registered successfully. Please verify before logging in."
+				);
+				router.push("/login");
+			}
+		} catch (error: any) {
+			console.log(error.response.data.error);
+			if (error.response.data.error == "User already exists") {
+				toast.error("User already exists!");
+			}
 		} finally {
 			setLoading(false);
 		}
@@ -107,7 +113,7 @@ let SignUp = () => {
 				<button
 					onClick={onSignup}
 					disabled={isButtonDisabled == false ? false : true}
-					className={`bg-blue-500 px-3 py-2 text-xl ${
+					className={`bg-blue-500 rounded-md px-3 py-2 text-xl ${
 						isButtonDisabled ? "disabled:bg-gray-500" : ""
 					}`}
 				>

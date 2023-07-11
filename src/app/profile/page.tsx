@@ -8,41 +8,65 @@ import { useRouter } from "next/navigation";
 
 let Profile = () => {
 	const router = useRouter();
-	let [data, setData] = useState("");
+	let [data, setData] = useState({
+		username: "",
+		email: "",
+	});
 
 	let onLogout = async () => {
 		try {
 			await axios.get("/api/users/logout");
 			toast.success("Logout success!");
-			router.push("/");
+			router.push("/login");
 		} catch (error: any) {
-			console.log(error.message);
-			toast.error(error.message);
+			console.log(error.data.response.data.error);
 		}
 	};
 
 	useEffect(() => {
 		async function getUserDetails() {
-			const res = await axios.get("/api/users/me");
+			try {
+				const res = await axios.get("/api/users/me");
 
-			console.log(res.data);
-
-			setData(res.data.user._id);
+				if (res.data.message == "Got user details") {
+					setData({
+						email: res.data.user.email,
+						username: res.data.user.username,
+					});
+				}
+			} catch (error: any) {
+				if (error.response.data.error == "jwt must be provided") {
+					toast.error("Please login first");
+					router.refresh();
+				}
+				if (error.response.data.error == "User not found!") {
+					setData({
+						email: "",
+						username: "",
+					});
+				}
+			}
 		}
 		getUserDetails();
-	}, [data]);
+	}, []);
 
 	return (
 		<>
-			<h2>Main page</h2>{" "}
-			{data == "" ? (
+			<h2 className="text-4xl py-6">Main profile page</h2>{" "}
+			{data.email == "" ? (
 				"Please login first!"
 			) : (
 				<>
-					<Link href={`/profile/${data}`}> {data} </Link>
+					<div className="py-10">
+						<p>Username: {data.username}</p>
+						<p>Email: {data.email}</p>
+					</div>
 				</>
-			)}{" "}
-			<button onClick={onLogout} className={`bg-blue-500 px-3 py-2 text-xl`}>
+			)}
+			<button
+				onClick={onLogout}
+				className={`bg-blue-500 rounded-md px-3 py-2 text-xl`}
+			>
 				Logout
 			</button>
 		</>

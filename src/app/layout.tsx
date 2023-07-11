@@ -20,14 +20,16 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={inter.className}>
 				<header className="flex flex-row text-xl justify-between mx-8 py-4">
-					<h2>next auth course</h2>
+					<Link href={"/"}>
+						<h2>next auth course</h2>
+					</Link>
 					<nav className="flex flex-row gap-4">
 						<Link href={"/profile"}>Profile</Link>
 						<Link href={"/cart"}>Cart</Link>
 					</nav>
 				</header>
 				<Toaster />
-				<main className="flex flex-col justify-center items-center ">
+				<main className="flex flex-col justify-center items-center min-h-[50vh]">
 					{children}
 				</main>
 			</body>
